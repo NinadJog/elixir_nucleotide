@@ -1,19 +1,31 @@
-defmodule ElixirNucleotide do
-  @moduledoc """
-  Documentation for `ElixirNucleotide`.
-  """
+defmodule NucleotideCount do
+  @nucleotides [?A, ?C, ?G, ?T]
 
   @doc """
-  Hello world.
+  Counts individual nucleotides in a NucleotideCount strand.
 
   ## Examples
 
-      iex> ElixirNucleotide.hello()
-      :world
+  iex> NucleotideCount.count('AATAA', ?A)
+  4
 
+  iex> NucleotideCount.count('AATAA', ?T)
+  1
+
+  Iteration #2
   """
-  def hello do
-    IO.puts "Hello world"
-    :world
-  end
+  @spec count([char], char) :: non_neg_integer
+  def count(strand, nucleotide), do: Enum.count(strand, fn(x) -> x === nucleotide end)
+
+  @doc """
+  Returns a summary of counts by nucleotide.
+
+  ## Examples
+
+  iex> NucleotideCount.histogram('AATAA')
+  %{?A => 4, ?T => 1, ?C => 0, ?G => 0}
+  """
+  @spec histogram([char]) :: map
+  def histogram(strand), do: for n <- @nucleotides, into: Map.new, do: {n, count(strand, n)}
+
 end
